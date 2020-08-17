@@ -27,7 +27,7 @@
 #include <Wire.h>
 
 /** STMPE610 Address **/
-#define STMPE_ADDR 0x41
+#define STMPE_ADDR 0x4d
 
 /** Reset Control **/
 #define STMPE_SYS_CTRL1 0x03

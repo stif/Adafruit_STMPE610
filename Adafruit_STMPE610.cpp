@@ -194,6 +194,7 @@ uint16_t Adafruit_STMPE610::getVersion() {
  *  @param  *z
  *	    The z coordinate
  */
+/*
 void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
   uint8_t data[4];
 
@@ -209,7 +210,29 @@ void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
   *y |= data[2];
   *z = data[3];
 }
+*/
+void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
+  uint8_t data[4];
+  // _i2caddr
+  _wire->requestFrom(_i2caddr, (byte)5);
+  //_wire->requestFrom(0x4d, (byte)5);
+  // *z = _wire->read() & 1;
+  for (uint8_t i=0; i<=4; i++) {
+    data[i] = _wire->read();//readRegister8(0xD7); //SPI.transfer(0x00);
+    //Serial.print("0x"); Serial.print(data[i], HEX); Serial.print(" / ");
+  }
+  *x = data[2];
+  *x <<= 8;
+  *x |= data[1];
+  *y = data[4];
+  *y <<= 8;
+  *y |= data[3];
+  *z = data[0] & 0x1;
 
+//  if (bufferEmpty())
+//    writeRegister8(STMPE_INT_STA, 0xFF); // reset all ints
+  _wire->endTransmission();
+}
 /*!
  *  @brief  Returns point for touchscreen data
  *  @return The touch point using TS_Point
@@ -219,12 +242,12 @@ TS_Point Adafruit_STMPE610::getPoint() {
   uint8_t z;
 
   /* Making sure that we are reading all data before leaving */
-  while (!bufferEmpty()) {
+  //while (!bufferEmpty()) {
     readData(&x, &y, &z);
-  }
+  //}
 
-  if (bufferEmpty())
-    writeRegister8(STMPE_INT_STA, 0xFF); // reset all ints
+  //if (bufferEmpty())
+  //  writeRegister8(STMPE_INT_STA, 0xFF); // reset all ints
 
   return TS_Point(x, y, z);
 }
