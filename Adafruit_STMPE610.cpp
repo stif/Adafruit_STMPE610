@@ -212,7 +212,7 @@ void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
 }
 */
 void Adafruit_STMPE610::readData(uint16_t *x, uint16_t *y, uint8_t *z) {
-  uint8_t data[4];
+  uint8_t data[5];
   // _i2caddr
   _wire->requestFrom(_i2caddr, (byte)5);
   //_wire->requestFrom(0x4d, (byte)5);
